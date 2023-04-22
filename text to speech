@@ -1,0 +1,24 @@
+from gtts import gTTS
+from io import BytesIO
+from pygame import mixer
+import tempfile
+import time
+
+mp3_fp = BytesIO()
+tts = gTTS('Hello, I am here learning python programming from gtts', lang='en')
+tts.write_to_fp(mp3_fp)
+
+mixer.init()
+temp_file = tempfile.NamedTemporaryFile(delete=False)
+temp_file.write(mp3_fp.getvalue())
+temp_file.close()
+
+mixer.music.load(temp_file.name)
+mixer.music.play()
+
+# Wait for the audio to finish playing
+while mixer.music.get_busy():
+    time.sleep(0.1)
+
+# Delete the temporary file
+temp_file.unlink()
